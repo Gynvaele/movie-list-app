@@ -1,20 +1,44 @@
 import React, {PureComponent} from "react";
-import {moviesData} from "../moviesData";
+import {API_KEY_3, API_URL} from "../utils/api";
 import MovieItem from "./MovieItem";
 import "./index.scss";
 
 // UI = fn(state, props)
 
 class App extends PureComponent {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            movies: moviesData,
+            movies: [],
             moviesWillWatch: [],
         };
 
-        // this.removeMovie = this.removeMovie.bind(this);
+        console.log("constructor");
+    }
+
+
+// /movie/popular - популярные
+// /discover/movie - фильмы
+// /discover/tv - сериалы
+
+
+    //можно не на столько расписывать, но так понятнее для разбора как работает метод fetch и then
+    componentDidMount() {
+        console.log("component did mount");
+        fetch(`${API_URL}/discover/tv?api_key=${API_KEY_3}&sort_by=popularity.desc`).then((response) => {
+            console.log("response");
+            return response.json();
+        }).then((data) => {
+            console.log("data");
+            return data.results;
+        }).then((results) => {
+            console.log("results", results);
+            this.setState({
+                movies: results
+            })
+        });
+        console.log("after fetch");
     }
 
     removeMovie = movie => {
@@ -27,11 +51,7 @@ class App extends PureComponent {
     };
 
     addMovieToWillWatch = movie => {
-        // const updateMoviesWillWatch = [...this.state.moviesWillWatch];
-        // updateMoviesWillWatch.push(movie);
-
         const updateMoviesWillWatch = [...this.state.moviesWillWatch, movie];
-
         this.setState({
             moviesWillWatch: updateMoviesWillWatch,
         });
@@ -47,15 +67,15 @@ class App extends PureComponent {
     };
 
     render() {
-        console.log(this.state.moviesWillWatch);
+        console.log("render component");
         return (
             <div className="container  pt-3">
                 <div className="row">
-                    <div className="md col-9 ">
+                    <div className="md col-sm-12 col-md-9 ">
                         <div className="row">
                             {this.state.movies.map(movie => {
                                 return (
-                                    <div className="col-6 mb-4" key={movie.id}>
+                                    <div className="col-sm-12 col-md-6 mb-4" key={movie.id}>
                                         <MovieItem
                                             movie={movie}
                                             removeMovie={this.removeMovie}
@@ -67,24 +87,26 @@ class App extends PureComponent {
                             })}
                         </div>
                     </div>
-                    <div className="col-3">
-                        <p>Will Watch: {this.state.moviesWillWatch.length}</p>
-                        <div>
-                            {this.state.moviesWillWatch.length === 0 ? (
-                                ""
-                            ) : (
-                                <div className="card p-1">
-                                    {this.state.moviesWillWatch.map(willList => {
-                                        return (
-                                            <div key={willList.id}>
-                                                <div className="movieList">
-                                                    {willList.title} Rate: {willList.vote_average}
+                    <div className="col-sm-12 col-md-3">
+                        <div className="right-bar col-12">
+                            <p>Will Watch: {this.state.moviesWillWatch.length}</p>
+                            <div>
+                                {this.state.moviesWillWatch.length === 0 ? (
+                                    ""
+                                ) : (
+                                    <div className="card p-1">
+                                        {this.state.moviesWillWatch.map(willList => {
+                                            return (
+                                                <div key={willList.id}>
+                                                    <div className="movieList">
+                                                        {willList.title || willList.name} Rate: {willList.vote_average}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
