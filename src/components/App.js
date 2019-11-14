@@ -1,6 +1,7 @@
 import React, {PureComponent} from "react";
 import {API_KEY_3, API_URL} from "../utils/api";
 import MovieItem from "./MovieItem";
+import MovieTabs from "./MovieTabs";
 import "./index.scss";
 
 // UI = fn(state, props)
@@ -12,6 +13,7 @@ class App extends PureComponent {
         this.state = {
             movies: [],
             moviesWillWatch: [],
+            sort_by: "popularity.desc",
         };
 
         console.log("constructor");
@@ -26,7 +28,7 @@ class App extends PureComponent {
     //можно не на столько расписывать, но так понятнее для разбора как работает метод fetch и then
     componentDidMount() {
         console.log("component did mount");
-        fetch(`${API_URL}/discover/tv?api_key=${API_KEY_3}&sort_by=popularity.desc`).then((response) => {
+        fetch(`${API_URL}/discover/tv?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}`).then((response) => {
             console.log("response");
             return response.json();
         }).then((data) => {
@@ -69,9 +71,14 @@ class App extends PureComponent {
     render() {
         console.log("render component");
         return (
-            <div className="container  pt-3">
-                <div className="row">
-                    <div className="md col-sm-12 col-md-9 ">
+            <div className="container col-12 mx-1">
+                <div className="row mt-3">
+                    <div className="col-sm-12 col-md-9">
+                        <div className="row my-2">
+                            <div className="col-12">
+                                <MovieTabs sort_by={this.state.sort_by}/>
+                            </div>
+                        </div>
                         <div className="row">
                             {this.state.movies.map(movie => {
                                 return (
@@ -87,8 +94,8 @@ class App extends PureComponent {
                             })}
                         </div>
                     </div>
-                    <div className="col-sm-12 col-md-3">
-                        <div className="right-bar col-12">
+                    <div className="col-sm-12 col-md-3 position-relative">
+                        <div className="right-bar">
                             <p>Will Watch: {this.state.moviesWillWatch.length}</p>
                             <div>
                                 {this.state.moviesWillWatch.length === 0 ? (

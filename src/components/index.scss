@@ -20,10 +20,18 @@
 }
 
 .right-bar {
-  position: static;
+  position: sticky;
+  top: 1rem;
+  width: 100%;
   border: 2px solid chartreuse;
   border-radius: 2%;
-  padding: 1rem 0;
+  padding: 0.5rem;
+
+  p {
+    margin: 0.5rem 0;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
 }
 
 p {
