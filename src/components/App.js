@@ -28,20 +28,35 @@ class App extends PureComponent {
     //можно не на столько расписывать, но так понятнее для разбора как работает метод fetch и then
     componentDidMount() {
         console.log("component did mount");
-        fetch(`${API_URL}/discover/tv?api_key=${API_KEY_3}&sort_by=${this.state.sort_by}`).then((response) => {
+        this.getMovies();
+        console.log("after fetch");
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log("App didUpdate");
+        if (prevState.sort_by !== this.state.sort_by) {
+            console.log("App call api");
+            this.getMovies();
+        }
+    }
+
+    getMovies = () => {
+        fetch(
+            `${API_URL}/discover/movie?api_key=${API_KEY_3}&sort_by=${
+                this.state.sort_by}`
+        ).then((response) => {
             console.log("response");
             return response.json();
         }).then((data) => {
-            console.log("data");
             return data.results;
         }).then((results) => {
-            console.log("results", results);
             this.setState({
                 movies: results
             })
         });
-        console.log("after fetch");
-    }
+
+    };
+
 
     removeMovie = movie => {
         const updateMovies = this.state.movies.filter(function (item) {
@@ -68,15 +83,24 @@ class App extends PureComponent {
         });
     };
 
+
+    changeSortTab = value => {
+        this.setState({
+                sort_by: value
+            }
+        )
+    };
+
+
     render() {
-        console.log("render component");
+        console.log("render component", this.state.sort_by);
         return (
-            <div className="container col-12 mx-1">
+            <div className="container col-11">
                 <div className="row mt-3">
                     <div className="col-sm-12 col-md-9">
                         <div className="row my-2">
                             <div className="col-12">
-                                <MovieTabs sort_by={this.state.sort_by}/>
+                                <MovieTabs sort_by={this.state.sort_by} changeSortTab={this.changeSortTab}/>
                             </div>
                         </div>
                         <div className="row">

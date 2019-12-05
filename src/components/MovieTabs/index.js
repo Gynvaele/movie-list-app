@@ -1,26 +1,48 @@
 import React from 'react';
 
-const MovieTabs = (props) => {
-    return (
-        <ul className="tabs nav nav-pills">
-            <li className="nav-item  mr-1">
-                <div className={`nav-link ${props.sort_by === "popularity.desc" ? "active" : ""}`}>
-                    Popularity desk
-                </div>
-            </li>
-            <li className="nav-item  mr-1">
-                <div className={`nav-link ${props.sort_by === "popularity.desc" ? "active" : ""}`}>
-                    First air date desk
-                </div>
-            </li>
-            <li className="nav-item mr-1">
-                <div className={`nav-link ${props.sort_by === "popularity.desc" ? "active" : ""}`}>
-                    Vote average desk
-                </div>
-            </li>
-        </ul>
-    )
-};
+class MovieTabs extends React.Component {
+
+    handleClick = (value) => {
+        return () => {
+            this.props.changeSortTab(value);
+        }
+    };
+
+    getClassLink = (value) => {
+        return `nav-link ${this.props.sort_by === value ? "active" : ""}`
+    };
+
+
+    render() {
+        return (
+            <div>
+                <ul className="tabs nav nav-tabs">
+                    <li className="nav-item">
+                        <div className={this.getClassLink("popularity.desc")}
+                             onClick={this.handleClick("popularity.desc")}>
+                            Popularity
+                        </div>
+                    </li>
+                    < li
+                        className="nav-item  mr-1">
+                        <div
+                            className={this.getClassLink("revenue.desc")}
+                            onClick={this.handleClick("revenue.desc")}>
+                            Revenue
+                        </div>
+                    </li>
+                    <li className="nav-item mr-1">
+                        <div
+                            className={this.getClassLink("vote_average.desc")}
+                            onClick={this.handleClick("vote_average.desc")}>
+                            Vote average
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        )
+    }
+}
 
 
 export default MovieTabs;
