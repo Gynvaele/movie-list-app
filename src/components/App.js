@@ -95,7 +95,7 @@ class App extends PureComponent {
     render() {
         console.log("render component", this.state.sort_by);
         return (
-            <div className="container col-11">
+            <div className="container col-11 p-3" style={{border: "1px solid black"}}>
                 <div className="row mt-3">
                     <div className="col-sm-12 col-md-9">
                         <div className="row my-2">
@@ -119,7 +119,7 @@ class App extends PureComponent {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-3 position-relative">
-                        <div className="right-bar">
+                        <div className="right-bar mt-sm-5 mb-1">
                             <p>Will Watch: {this.state.moviesWillWatch.length}</p>
                             <div>
                                 {this.state.moviesWillWatch.length === 0 ? (
